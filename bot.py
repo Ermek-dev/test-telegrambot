@@ -2,10 +2,7 @@ import telebot
 import openai
 import os
 import config
-import logging
-
-# настройка логирования
-logging.basicConfig(filename='app.log', level=logging.DEBUG)
+import json
 
 # Установить токен вашего телеграм-бота
 bot = telebot.TeleBot(config.TOKEN)
@@ -40,10 +37,16 @@ def handle_message(message):
     bot.reply_to(message, response.choices[0].text)
 
     
-    # Логирование сообщения и ответа
-    logging.info(f"{message.from_user.username}: {message.text}")
-    logging.info(f"Bot: {response.choices[0].text}")
 
+# Опционально, сохраните беседу в файл журнала
+with open("./tmp/conversation.json", "a") as f:
+    log_entry = {
+        "user": message.from_user.username,
+        "message": message.text,
+        "bot_response": response.choices[0].text
+    }
+    json.dump(log_entry, f)
+    f.write("\n")
 
 # Запуск бота
 bot.polling()
