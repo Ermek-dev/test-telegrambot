@@ -39,8 +39,8 @@ def handle_message(message):
     # Опционально, сохраните беседу в файл журнала
     
     with open("./tmp/conversation.log", "a") as f:
-    f.write(f"{message.from_user.username}: {message.text}\n")
-    f.write(f"Bot: {response.choices[0].text}\n\n")
+        f.write(f"{message.from_user.username}: {message.text}\n")
+        f.write(f"Bot: {response.choices[0].text}\n\n")
 
 
 # Запуск бота
