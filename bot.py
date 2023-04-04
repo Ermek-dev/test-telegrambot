@@ -2,7 +2,8 @@ import telebot
 import openai
 import os
 import config
-
+from telebot.types import ReplyKeyboardMarkup, KeyboardButton
+from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton
 
 # Установить токен вашего телеграм-бота
 bot = telebot.TeleBot(config.TOKEN)
@@ -17,6 +18,26 @@ def welcome(message):
     bot.send_sticker(message.chat.id,sti)
     bot.send_message(message.chat.id, "Welcome,{0.first_name}!\nЯ-<b>{1.first_name}</b>,бот созданный чтобы быть твоим другом.".format(message.from_user,bot.get_me()),parse_mode='html')
 
+#кнопка меню для бота
+menu_keyboard = ReplyKeyboardMarkup(resize_keyboard=True)
+menu_keyboard.add(KeyboardButton('Restart Bot'))
+
+@bot.message_handler(commands=['menu'])
+def show_menu(message):
+    bot.send_message(message.chat.id, "Select an option:", reply_markup=menu_keyboard)
+
+
+#кнопка для перезапуска бота
+restart_button = InlineKeyboardButton('Restart', callback_data='restart')
+
+@bot.callback_query_handler(func=lambda call: call.data == 'restart')
+def restart_bot(call):
+    bot.send_message(call.message.chat.id, 'Bot is restarting...')
+    # Дополнительный код для перезапуска бота
+
+restart_markup = InlineKeyboardMarkup().add(restart_button)
+    
+    
 # Обработчик всех остальных сообщений
 @bot.message_handler(func=lambda message: True)
 def handle_message(message):
