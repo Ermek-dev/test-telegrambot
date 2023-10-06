@@ -1,2 +1,2 @@
 TOKEN = ""
-OPENAI_TOKEN = "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"
+OPENAI_TOKEN = ""
